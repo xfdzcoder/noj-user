@@ -58,7 +58,7 @@ import { setIntervalImmediately } from '@/utils/time'
 import { useUserStore } from '@/stores/userInfo'
 
 defineOptions({
-  name: 'Login'
+  name: 'PortalLogin'
 })
 
 let userStore = useUserStore()
