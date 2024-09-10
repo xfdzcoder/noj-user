@@ -1,4 +1,5 @@
-import request, { type Response } from '@/utils/request'
+import request from '@/utils/request'
+import type { Response } from '@/api/common'
 import { sha256 } from '@/utils/file'
 import type { UserInfo } from '@/api/user/index'
 import axios from 'axios'

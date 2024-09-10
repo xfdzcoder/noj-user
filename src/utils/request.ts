@@ -3,12 +3,6 @@ import { useUserStore } from '@/stores/userInfo'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
 
-export interface Response<T> {
-  code: '20000' | '50000'
-  data: T
-  message: string
-}
-
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 10000,
@@ -18,7 +12,6 @@ const instance = axios.create({
 const whiteList = [
   '/user/auth/login',
   '/user/auth/register',
-  '/noj1'
 ]
 instance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {

@@ -6,21 +6,29 @@ import {
 } from 'vue-router'
 import { useUserStore } from '@/stores/userInfo'
 import { ElMessage } from 'element-plus'
-import Index from '@/views/index/index.vue'
+import IndexLayout from '@/components/IndexLayout/index.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      component: Index,
+      component: IndexLayout,
+      redirect: '/index',
       meta: {
         needLogin: true
-      }
+      },
+      children: [
+        {
+          path: 'index',
+          name: 'Index',
+          component: () => import('@/views/index/index.vue')
+        }
+      ]
     },
     {
       path: '/user',
-      component: Index,
+      component: IndexLayout,
       children: [
         {
           path: 'dashboard',

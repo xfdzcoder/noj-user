@@ -1,5 +1,7 @@
-import request, { type Response } from '@/utils/request'
+import request from '@/utils/request'
+
 import type { LoginReq, LoginResp, RegisterReq, UserInfo } from '@/api/user/index'
+import type { Response } from '@/api/common'
 
 const baseUri = '/user/auth'
 
