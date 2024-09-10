@@ -8,7 +8,7 @@
           :show-file-list="false"
           :http-request="onUploadAvatar"
         >
-          <el-avatar size="large" shape="circle" :src="form.avatar ?? DefaultAvatar" />
+          <el-avatar size="large" shape="circle" :src="userInfo?.avatar ?? DefaultAvatar" />
         </el-upload>
       </el-form-item>
       <el-form-item label="昵称">
@@ -28,7 +28,7 @@ import type { UserInfo } from '@/api/user'
 import { useUserStore } from '@/stores/userInfo'
 import { storeToRefs } from 'pinia'
 import DefaultAvatar from '@/assets/default-avatar.png'
-import { upload } from '@/api/user/info'
+import { updateById, upload } from '@/api/user/info'
 
 defineOptions({
   name: 'UserInfo'
@@ -38,6 +38,14 @@ const userStore = useUserStore()
 const { userInfo } = storeToRefs(userStore)
 const form = ref<UserInfo>(userInfo.value as UserInfo)
 
+const update = () => {
+  if (userInfo.value) {
+    updateById(userInfo.value)
+      .then(res => {
+        ElMessage.success('更新成功')
+      })
+  }
+}
 
 const onUploadAvatar: UploadRequestHandler = async (options: UploadRequestOptions) => {
   console.log('upload avatar rawFile: ', options)
@@ -46,8 +54,14 @@ const onUploadAvatar: UploadRequestHandler = async (options: UploadRequestOption
     return Promise.reject()
   }
   upload(options.file)
-    .then(res => {
-      console.log(res)
+    .then((res: string | undefined) => {
+      if (res && userInfo.value) {
+        console.log('upload res: ', res)
+        userInfo.value.avatar = res
+        update()
+      } else {
+        ElMessage.error('上传失败')
+      }
     })
 
   return Promise.reject()
