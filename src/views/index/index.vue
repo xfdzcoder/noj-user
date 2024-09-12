@@ -4,8 +4,8 @@
       <div class="main-left">
         <div class="hot-calendar">
           <calendar-heatmap
-            :values="[]"
-            :end-date="'2024-09-10'"
+            :values="heatmap"
+            :end-date="'2024-09-12'"
           />
         </div>
         <div class="question-bank-list">
@@ -21,9 +21,16 @@
       </div>
       <div class="main-right">
         <h3>最近提交</h3>
-        <div class="recently-commit">
-          <el-table :data="recentlyCommit">
-
+        <div class="recently-execute-result">
+          <el-table :data="recentlyExecuteResult">
+            <el-table-column label="状态">
+              <template #default="scope">
+                <el-icon v-if="scope.row.succeed" class="result-success"><Select /></el-icon>
+                <el-icon v-else class="result-fail"><CloseBold /></el-icon>
+              </template>
+            </el-table-column>
+            <el-table-column label="题目名称" prop="questionInfo.title" />
+            <el-table-column label="平均耗时(ms)" prop="avgTime" />
           </el-table>
         </div>
         <h3>社群热度榜</h3>
@@ -41,32 +48,42 @@
 </template>
 
 <script setup lang="ts">
+import { Select, CloseBold } from '@element-plus/icons-vue'
 import { CalendarHeatmap } from 'vue3-calendar-heatmap'
 import { onMounted, ref } from 'vue'
 import { hotCommunity } from '@/api/community/info'
 import type { CommunityInfo } from '@/api/community'
 import { pageQuestion } from '@/api/question/bank'
-import type { QuestionCondition, QuestionInfo } from '@/api/question'
+import type { ExecuteResult, Heatmap, QuestionCondition, QuestionInfo } from '@/api/question'
+import { getHeatmap, recently } from '@/api/question/execute-result'
 defineOptions({
   name: 'Index'
 })
 
+const heatmap = ref<Heatmap[]>([])
 const questionBankList = ref<QuestionInfo[]>([])
-const recentlyCommit = ref([])
+const recentlyExecuteResult = ref<ExecuteResult[]>([])
 const communityList = ref<CommunityInfo[]>([])
 
 const init = () => {
+  getHeatmap()
+    .then(res => {
+      heatmap.value = res.data
+    })
   hotCommunity()
     .then(res => {
       communityList.value = res.data
     })
-  const condition: QuestionCondition = {
+  pageQuestion({
     current: 1,
     size: 20
-  }
-  pageQuestion(condition)
+  })
     .then(res => {
       questionBankList.value = res.data.records
+    })
+  recently()
+    .then(res => {
+      recentlyExecuteResult.value = res.data
     })
 }
 
@@ -104,5 +121,11 @@ onMounted(() => {
 }
 .community-list {
   border: 1px solid red;
+}
+.result-success {
+  color: green;
+}
+.result-fail {
+  color: red;
 }
 </style>
