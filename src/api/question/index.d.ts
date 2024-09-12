@@ -17,27 +17,45 @@ export interface QuestionInfo {
 }
 
 export interface ExecuteResultCondition extends BaseCondition {
-  userId: string
+  questionInfoId?: string
 }
 
 export interface ExecuteResult {
-  id: string;
-  userId: number;
-  questionInfoId: number;
-  executeInfoId: number;
-  succeed: boolean;
-  avgTime: number;
-  avgMemory: number;
-  passedCaseCount: number;
-  totalCaseCount: number;
-  input: any;
-  output: any;
-  exceptOutput: any;
-  throwableOutput: string;
-  exitType: number;
+  id: string
+  userId: number
+  questionInfoId: number
+  executeInfoId: number
+  succeed: boolean
+  avgTime: number
+  avgMemory: number
+  passedCaseCount: number
+  totalCaseCount: number
+  input: any
+  output: any
+  exceptOutput: any
+  throwableOutput: string
+  exitType: string
 }
 
 export interface Heatmap {
   date: string
   count: number
+}
+
+export interface ExecuteInfo {
+  id: number
+  questionInfoId: number
+  testCaseId: number
+  codeText: string
+  size: number
+  languageType: string
+  runType: number
+  timeout: number
+  memory: number
+}
+
+export interface ExecuteDetail {
+  result: ExecuteResult
+  info: ExecuteInfo
+  questionInfo: QuestionInfo
 }

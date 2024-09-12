@@ -43,6 +43,16 @@ const router = createRouter({
       ]
     },
     {
+      path: '/question',
+      component: IndexLayout,
+      children: [
+        {
+          path: 'info',
+          component: () => import('@/views/question/info/index.vue')
+        }
+      ]
+    },
+    {
       path: '/portal',
       children: [
         {
@@ -57,7 +67,6 @@ const router = createRouter({
 
 router.beforeEach((to: RouteLocationNormalizedLoaded, from: RouteLocationNormalizedLoaded) => {
   const { isLogin } = useUserStore()
-  console.log(! isLogin())
   if (to.meta?.needLogin && ! isLogin()) {
     ElMessage.warning('请先进行登录')
     return { path: '/portal/login' }

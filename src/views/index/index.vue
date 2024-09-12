@@ -22,7 +22,9 @@
       <div class="main-right">
         <h3>最近提交</h3>
         <div class="recently-execute-result">
-          <el-table :data="recentlyExecuteResult">
+          <el-table :data="recentlyExecuteResult"
+                    @row-click="onClickRecentlyResult"
+          >
             <el-table-column label="状态">
               <template #default="scope">
                 <el-icon v-if="scope.row.succeed" class="result-success"><Select /></el-icon>
@@ -56,14 +58,23 @@ import type { CommunityInfo } from '@/api/community'
 import { pageQuestion } from '@/api/question/bank'
 import type { ExecuteResult, Heatmap, QuestionCondition, QuestionInfo } from '@/api/question'
 import { getHeatmap, recently } from '@/api/question/execute-result'
+import { useRouter } from 'vue-router'
 defineOptions({
   name: 'Index'
 })
+const router = useRouter()
 
 const heatmap = ref<Heatmap[]>([])
 const questionBankList = ref<QuestionInfo[]>([])
 const recentlyExecuteResult = ref<ExecuteResult[]>([])
 const communityList = ref<CommunityInfo[]>([])
+
+const onClickRecentlyResult = (row: ExecuteResult, column: any, event: Event): void => {
+  router.push({
+    path: '/question/result/' + row.id
+  })
+}
+
 
 const init = () => {
   getHeatmap()

@@ -22,4 +22,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
+  export interface ComponentCustomProperties {
+    vDCodeHighlight: typeof import('vue-devui/d-code-highlight/index.es.js')['DCodeHighlightDirective']
+  }
 }

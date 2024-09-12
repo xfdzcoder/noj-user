@@ -6,7 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { DevUiResolver, ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -20,7 +20,10 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [
+        ElementPlusResolver(),
+        // DevUiResolver()
+      ],
     }),
   ],
   resolve: {

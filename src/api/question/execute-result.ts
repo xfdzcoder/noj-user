@@ -1,4 +1,4 @@
-import type { ExecuteResult, ExecuteResultCondition, Heatmap } from '@/api/question/index'
+import type { ExecuteDetail, ExecuteResult, ExecuteResultCondition, Heatmap } from '@/api/question/index'
 import request from '@/utils/request'
 import type { Page, Response } from '@/api/common'
 
@@ -14,4 +14,8 @@ export const recently = (): Promise<Response<ExecuteResult[]>> => {
 
 export const getHeatmap = (): Promise<Response<Heatmap[]>> => {
   return request.get(`${baseUri}/heatmap`)
+}
+
+export const getById = (id: string): Promise<Response<ExecuteDetail>> => {
+  return request.get(`${baseUri}/${id}`)
 }
