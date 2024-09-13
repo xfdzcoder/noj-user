@@ -36,7 +36,7 @@ defineOptions({
   name: 'QuestionResult'
 })
 const emits = defineEmits<{
-  (e: 'changeRight', componentName: string | undefined): void
+  (e: 'showResultDetail', direct: 'left' | 'right'): void
 }>()
 
 const questionStore = useQuestionStore()
@@ -45,11 +45,9 @@ const { currentExecuteResult } = storeToRefs(questionStore)
 const results = ref<Page<ExecuteResult>>()
 
 const onRowClick = (row: ExecuteResult, column: any, event: Event) => {
-  if (row.id === currentExecuteResult.value?.id) {
-    return
-  }
+  const refresh = currentExecuteResult.value?.id !== row.id
   currentExecuteResult.value = row
-  emits('changeRight', 'QuestionResultDetail')
+  emits('showResultDetail', 'right')
 }
 
 const init = () => {

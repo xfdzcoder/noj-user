@@ -39,19 +39,24 @@ const editorOptions = computed(() => ({
   language: currentExecuteInfo.value.languageType
 }))
 
+let checkerAlive = false
 const checkResult = (info: ExecuteInfo) => {
+  checkerAlive = true
   const checker = setInterval(() => {
     check(info.id)
       .then(res => {
         emits('showResultDetail')
         currentExecuteResult.value = res.data
         clearInterval(checker)
+        checkerAlive = false
         ElMessage.success('执行结束')
       })
   }, 5000)
   setTimeout(() => {
-    ElMessage.error('系统错误，执行失败')
-    clearInterval(checker)
+    if (checkerAlive) {
+      ElMessage.error('系统错误，执行失败')
+      clearInterval(checker)
+    }
   }, 30000)
 }
 const submit = () => {
@@ -63,6 +68,7 @@ const submit = () => {
   execute(data)
     .then(res => {
       checkResult(res.data)
+      currentExecuteInfo.value = res.data
       ElMessage.success('提交成功')
     })
 }
@@ -88,7 +94,7 @@ const submit = () => {
 
 .operate {
   position: fixed;
-  bottom: 5vh;
-  right: 19vw;
+  bottom: 10vh;
+  right: 16vw;
 }
 </style>

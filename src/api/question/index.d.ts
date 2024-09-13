@@ -57,7 +57,6 @@ export interface ExecuteInfo {
 export interface ExecuteDetail {
   result: ExecuteResult
   info: ExecuteInfo
-  questionInfo: QuestionInfo
 }
 
 interface CodeExecuteReq {

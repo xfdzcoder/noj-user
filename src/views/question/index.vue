@@ -1,74 +1,87 @@
 <template>
   <div class="container">
     <div class="left">
-
-      <component :is="components.get(leftComponentName)"
-                 @change-right="changeRight"
-                 @change-left="changeLeft"
-                 @reset="reset"
-      />
+      <el-tabs type="border-card" v-model="leftTab" @tab-remove="showResultDetail.remove('left')">
+        <el-tab-pane label="题目详情" name="QuestionInfo">
+          <QuestionInfo />
+        </el-tab-pane>
+        <el-tab-pane label="提交记录" name="QuestionResult">
+          <QuestionResult @show-result-detail="showResultDetail.show" />
+        </el-tab-pane>
+        <el-tab-pane v-if="showResultDetail.left" label="执行结果" closable name="QuestionResultDetail">
+          <QuestionResultDetail :key="detailRefreshKey" />
+        </el-tab-pane>
+      </el-tabs>
     </div>
     <div class="right">
-      <component :is="components.get(rightComponentName)"
-                 :key="rightKey"
-                 @show-result-detail="showResultDetail"
-      />
+      <el-tabs type="border-card" v-model="rightTab" @tab-remove="showResultDetail.remove('right')">
+        <el-tab-pane label="代码" name="QuestionCode">
+          <QuestionCode @show-result-detail="() => showResultDetail.show('left')" />
+        </el-tab-pane>
+        <el-tab-pane v-if="showResultDetail.right" label="执行结果" closable name="QuestionResultDetail">
+          <QuestionResultDetail :key="detailRefreshKey" fetch />
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue'
+import { ref } from 'vue'
 import QuestionResult from '@/views/question/components/result/index.vue'
 import QuestionResultDetail from '@/views/question/components/result/detail.vue'
 import QuestionCode from '@/views/question/components/code/index.vue'
 import QuestionInfo from '@/views/question/components/info/index.vue'
+import { useQuestionStore } from '@/stores/question'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'Question'
 })
 
-const components = new Map<string, InstanceType<any>>([
-  ['QuestionInfo', QuestionInfo],
-  ['QuestionResult', QuestionResult],
-  ['QuestionResultDetail', QuestionResultDetail],
-  ['QuestionCode', QuestionCode],
-])
+type TabName =
+  'QuestionInfo' |
+  'QuestionResult' |
+  'QuestionResultDetail' |
+  'QuestionCode'
 
-const leftComponentName = ref<string>('QuestionResult')
-const rightComponentName = ref<string>('QuestionCode')
-const rightKey = ref<number>(-999999)
+const questionStore = useQuestionStore()
+const { currentExecuteResult } = storeToRefs(questionStore)
 
-const changeLeft = (componentName: string | undefined) => {
-  if (componentName) {
-    if (leftComponentName.value == componentName) {
-      return
+const leftTab = ref<TabName>('QuestionResult')
+const rightTab = ref<TabName>('QuestionCode')
+const detailRefreshKey = ref<number>(0)
+
+const showResultDetail = ref({
+  left: false,
+  right: false,
+  show: (direct: 'left' | 'right') => {
+    if (direct === 'left') {
+      if (leftTab.value != 'QuestionResultDetail') {
+        showResultDetail.value.left = true
+        showResultDetail.value.right = false
+        leftTab.value = 'QuestionResultDetail'
+      }
+    } else {
+      if (rightTab.value != 'QuestionResultDetail') {
+        showResultDetail.value.left = false
+        showResultDetail.value.right = true
+        rightTab.value = 'QuestionResultDetail'
+      }
     }
-    leftComponentName.value = componentName
-  } else {
-    leftComponentName.value = 'QuestionResult'
-  }
-}
-const changeRight = (componentName: string | undefined): void => {
-  if (componentName) {
-    rightKey.value = rightKey.value + 1
-    if (rightComponentName.value == componentName) {
-      return
+    detailRefreshKey.value = detailRefreshKey.value + 1
+  },
+  remove: (direct: 'left' | 'right') => {
+    if (direct === 'left') {
+      leftTab.value = 'QuestionInfo'
+      showResultDetail.value.left = false
+    } else {
+      rightTab.value = 'QuestionCode'
+      showResultDetail.value.right = false
     }
-    rightComponentName.value = componentName
-  } else {
-    rightComponentName.value = 'QuestionCode'
   }
-}
-const reset = () => {
-  leftComponentName.value = 'QuestionResult'
-  rightComponentName.value = 'QuestionCode'
-}
-const showResultDetail = (): void => {
-  leftComponentName.value = 'QuestionResultDetail'
-}
+})
 
-// const questionInfoId = ref<string>('1829045838811627522')
 
 </script>
 
@@ -84,5 +97,11 @@ const showResultDetail = (): void => {
 
 .right {
   width: 50%;
+}
+
+.el-tabs,
+.el-tabs__content,
+.el-tab-pane {
+  height: 100%;
 }
 </style>
