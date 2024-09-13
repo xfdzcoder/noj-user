@@ -2,8 +2,9 @@
   <div>
     <el-table :data="results?.records"
               @row-click="onRowClick"
+
     >
-      <el-table-column label="状态">
+      <el-table-column label="状态" align="center">
         <template #default="scope">
           <el-icon v-if="scope.row.succeed" class="result-success"><Select /></el-icon>
           <el-icon v-else class="result-fail">
@@ -11,10 +12,14 @@
           </el-icon>
         </template>
       </el-table-column>
-      <el-table-column label="执行用时" prop="avgTime" />
-      <el-table-column label="消耗内存">
+      <el-table-column label="执行用时" align="center">
         <template #default="scope">
-          {{ formatBytes(scope.row.avgMemory) }}
+          {{ (scope.row.avgTime && scope.row.avgTime !== 0) ? scope.row.avgTime : '-' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="消耗内存" align="center">
+        <template #default="scope">
+          {{ (scope.row.avgMemory && scope.row.avgMemory !== 0) ? formatBytes(scope.row.avgMemory) : '-' }}
         </template>
       </el-table-column>
     </el-table>
@@ -68,5 +73,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
+.result-fail {
+  color: red;
+}
+.result-success {
+  color: green;
+}
 </style>

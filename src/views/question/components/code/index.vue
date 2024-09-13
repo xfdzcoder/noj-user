@@ -1,8 +1,11 @@
 <template>
   <div class="container">
-    <el-select v-model="currentExecuteInfo.languageType">
-      <el-option value="java">Java</el-option>
-    </el-select>
+    <div class="header">
+      <el-select v-model="currentExecuteInfo.languageType">
+        <el-option value="java">Java</el-option>
+      </el-select>
+      <el-button type="primary" @click="submit">提交</el-button>
+    </div>
     <div class="editor-box">
       <code-editor
         class="editor"
@@ -11,7 +14,6 @@
       />
     </div>
     <div class="operate">
-      <el-button type="primary" @click="submit">提交</el-button>
     </div>
   </div>
 </template>
@@ -82,6 +84,16 @@ const submit = () => {
   flex-direction: column;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header .el-select,
+.header .el-button {
+  width: 30%;
+}
+
 .editor-box {
   height: 90%;
   width: 100%;
@@ -92,9 +104,4 @@ const submit = () => {
   width: 100%;
 }
 
-.operate {
-  position: fixed;
-  bottom: 10vh;
-  right: 16vw;
-}
 </style>

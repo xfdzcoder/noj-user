@@ -2,8 +2,11 @@
   <div>
     <el-button link @click="showResultList">查看全部执行结果</el-button>
     <div class="">
-      <div v-if="currentExecuteResult?.succeed">
-        成功
+      <div v-if="currentExecuteResult?.succeed" class="success-box">
+        <div class="success-title">
+          <div class="label">运行结果:&ensp;</div>
+          <div class="content">运行成功</div>
+        </div>
         <div class="time-memory">
           <div class="time">
             执行用时：{{ currentExecuteResult?.avgTime }} ms
@@ -105,6 +108,19 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.success-box {
+  font-size: 1.2rem;
+}
+
+.success-title {
+  display: flex;
+}
+.success-title .content {
+  font-size: 1.2rem;
+  color: green;
+  font-weight: bold;
+}
+
 .error-box {
   font-size: 1.2rem;
   font-family: "Microsoft YaHei UI", serif;
@@ -144,6 +160,11 @@ onMounted(() => {
   word-wrap: break-word;
   font-family: "Courier New", monospace, serif;
   border-radius: 10px;
+}
+
+.code {
+  border-top: 1px solid #77777c;
+  margin-top: 20px;
 }
 .code-content {
   background-color: #f7f7f8;
