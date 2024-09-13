@@ -2,6 +2,7 @@ import axios, { type AxiosResponse, type InternalAxiosRequestConfig } from 'axio
 import { useUserStore } from '@/stores/userInfo'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
+import type { Response } from '@/api/common'
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -42,8 +43,12 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (res: AxiosResponse) => {
-
-    return res.data
+    const resp = res.data as Response<any>
+    if (resp.code === '20000') {
+      return res.data
+    } else {
+      return Promise.reject(resp)
+    }
   }
 )
 

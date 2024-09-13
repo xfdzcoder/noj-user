@@ -16,6 +16,6 @@ export const getHeatmap = (): Promise<Response<Heatmap[]>> => {
   return request.get(`${baseUri}/heatmap`)
 }
 
-export const getById = (id: string): Promise<Response<ExecuteDetail>> => {
+export const getById = (id: string): Promise<Response<ExecuteResult>> => {
   return request.get(`${baseUri}/${id}`)
 }

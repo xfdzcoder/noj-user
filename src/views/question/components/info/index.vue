@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <h1>Code</h1>
-  </div>
+
 </template>
 
 <script setup lang="ts">
 defineOptions({
-  name: 'QuestionCode'
+  name: 'QuestionInfo'
 })
 </script>
 

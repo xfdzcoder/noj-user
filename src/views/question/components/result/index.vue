@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="results"
+    <el-table :data="results?.records"
               @row-click="onRowClick"
     >
       <el-table-column label="状态">

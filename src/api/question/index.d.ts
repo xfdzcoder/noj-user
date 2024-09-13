@@ -43,7 +43,7 @@ export interface Heatmap {
 }
 
 export interface ExecuteInfo {
-  id: number
+  id: string
   questionInfoId: number
   testCaseId: number
   codeText: string
@@ -58,4 +58,10 @@ export interface ExecuteDetail {
   result: ExecuteResult
   info: ExecuteInfo
   questionInfo: QuestionInfo
+}
+
+interface CodeExecuteReq {
+  code: string
+  questionInfoId: string
+  languageType: string
 }

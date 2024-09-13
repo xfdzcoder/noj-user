@@ -24,12 +24,21 @@ defineOptions({
 .page {
   height: 100vh;
   width: 100vw;
-  position: absolute;
+/*  position: absolute;
   top: 0;
-  left: 0;
+  left: 0;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 .header,
 .main {
-  margin: 2vh 20vw 0 20vw;
+  margin: 0 20vw 0 20vw;
+}
+.header {
+  height: 3vh;
+}
+.main {
+  height: 90vh;
 }
 </style>
