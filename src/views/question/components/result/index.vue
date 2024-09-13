@@ -6,7 +6,9 @@
       <el-table-column label="状态">
         <template #default="scope">
           <el-icon v-if="scope.row.succeed" class="result-success"><Select /></el-icon>
-          <el-icon v-else class="result-fail"><CloseBold /></el-icon>
+          <el-icon v-else class="result-fail">
+            <CloseBold />
+          </el-icon>
         </template>
       </el-table-column>
       <el-table-column label="执行用时" prop="avgTime" />
@@ -21,24 +23,33 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, nextTick } from 'vue'
 import type { ExecuteResult, ExecuteResultCondition } from '@/api/question'
 import { CloseBold, Select } from '@element-plus/icons-vue'
 import { list } from '@/api/question/execute-result'
-import type { Page } from '@/api/common';
+import type { Page } from '@/api/common'
 import { formatBytes } from '@/utils/format'
+import { useQuestionStore } from '@/stores/question'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'QuestionResult'
 })
 const emits = defineEmits<{
-  (e: 'changeRight', index: number): void
+  (e: 'changeRight', componentName: string | undefined): void
 }>()
+
+const questionStore = useQuestionStore()
+const { currentExecuteResult } = storeToRefs(questionStore)
 
 const results = ref<Page<ExecuteResult>>()
 
 const onRowClick = (row: ExecuteResult, column: any, event: Event) => {
-  emits('changeRight', 1)
+  if (row.id === currentExecuteResult.value?.id) {
+    return
+  }
+  currentExecuteResult.value = row
+  emits('changeRight', 'QuestionResultDetail')
 }
 
 const init = () => {

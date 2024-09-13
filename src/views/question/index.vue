@@ -2,14 +2,15 @@
   <div class="container">
     <div class="left">
 
-      <component :is="leftComponent"
+      <component :is="components.get(leftComponentName)"
                  @change-right="changeRight"
                  @change-left="changeLeft"
                  @reset="reset"
       />
     </div>
     <div class="right">
-      <component :is="rightComponent"
+      <component :is="components.get(rightComponentName)"
+                 :key="rightKey"
                  @show-result-detail="showResultDetail"
       />
     </div>
@@ -17,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef } from 'vue'
+import { ref, shallowRef } from 'vue'
 import QuestionResult from '@/views/question/components/result/index.vue'
 import QuestionResultDetail from '@/views/question/components/result/detail.vue'
 import QuestionCode from '@/views/question/components/code/index.vue'
@@ -34,29 +35,37 @@ const components = new Map<string, InstanceType<any>>([
   ['QuestionCode', QuestionCode],
 ])
 
-const leftComponent = shallowRef(components.get('QuestionResult'))
-const rightComponent = shallowRef(components.get('QuestionCode'))
+const leftComponentName = ref<string>('QuestionResult')
+const rightComponentName = ref<string>('QuestionCode')
+const rightKey = ref<number>(-999999)
 
-const changeLeft = (componentName: string | undefined): void => {
+const changeLeft = (componentName: string | undefined) => {
   if (componentName) {
-    leftComponent.value = components.get(componentName)
+    if (leftComponentName.value == componentName) {
+      return
+    }
+    leftComponentName.value = componentName
   } else {
-    leftComponent.value = components.get('QuestionResult')
+    leftComponentName.value = 'QuestionResult'
   }
 }
 const changeRight = (componentName: string | undefined): void => {
   if (componentName) {
-    rightComponent.value = components.get(componentName)
+    rightKey.value = rightKey.value + 1
+    if (rightComponentName.value == componentName) {
+      return
+    }
+    rightComponentName.value = componentName
   } else {
-    rightComponent.value = components.get('QuestionCode')
+    rightComponentName.value = 'QuestionCode'
   }
 }
 const reset = () => {
-  leftComponent.value = components.get('QuestionResult')
-  rightComponent.value = components.get('QuestionCode')
+  leftComponentName.value = 'QuestionResult'
+  rightComponentName.value = 'QuestionCode'
 }
 const showResultDetail = (): void => {
-  leftComponent.value = components.get('QuestionResultDetail')
+  leftComponentName.value = 'QuestionResultDetail'
 }
 
 // const questionInfoId = ref<string>('1829045838811627522')
@@ -68,9 +77,11 @@ const showResultDetail = (): void => {
   display: flex;
   height: 100%;
 }
+
 .left {
   width: 50%;
 }
+
 .right {
   width: 50%;
 }

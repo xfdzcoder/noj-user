@@ -28,7 +28,9 @@
         代码 | {{ currentExecuteInfo?.languageType }}
       </div>
       <div class="code-content">
-        <pre v-d-code-highlight :data-lang="currentExecuteInfo?.languageType.toLowerCase()" v-html="currentExecuteInfo?.codeText"></pre>
+        <keep-alive>
+          <pre v-d-code-highlight :data-lang="currentExecuteInfo?.languageType.toLowerCase()" v-html="currentExecuteInfo?.codeText"></pre>
+        </keep-alive>
       </div>
     </div>
   </div>
@@ -67,6 +69,7 @@ onMounted(() => {
     emits('reset')
     return
   }
+  console.log('Detail Mounted')
   const succeed = currentExecuteResult.value.succeed
   if (succeed === undefined || succeed === null) {
     getById(currentExecuteResult.value.id)
