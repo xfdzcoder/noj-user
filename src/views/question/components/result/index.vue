@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref, nextTick } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { ExecuteResult, ExecuteResultCondition } from '@/api/question'
 import { CloseBold, Select } from '@element-plus/icons-vue'
 import { list } from '@/api/question/execute-result'
@@ -50,7 +50,6 @@ const { currentExecuteResult } = storeToRefs(questionStore)
 const results = ref<Page<ExecuteResult>>()
 
 const onRowClick = (row: ExecuteResult, column: any, event: Event) => {
-  const refresh = currentExecuteResult.value?.id !== row.id
   currentExecuteResult.value = row
   emits('showResultDetail', 'right')
 }
@@ -68,6 +67,10 @@ const init = () => {
 
 onMounted(() => {
   init()
+})
+
+defineExpose({
+  init
 })
 
 </script>

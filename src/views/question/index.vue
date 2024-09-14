@@ -1,12 +1,12 @@
 <template>
   <div class="container">
     <div class="left">
-      <el-tabs type="border-card" v-model="leftTab" @tab-remove="showResultDetail.remove('left')">
+      <el-tabs type="border-card" v-model="leftTab" @tab-click="onLeftTabClick" @tab-remove="showResultDetail.remove('left')">
         <el-tab-pane label="题目详情" name="QuestionInfo">
           <QuestionInfo />
         </el-tab-pane>
         <el-tab-pane label="提交记录" name="QuestionResult">
-          <QuestionResult @show-result-detail="showResultDetail.show" />
+          <QuestionResult ref="questionResultRef" @show-result-detail="showResultDetail.show" />
         </el-tab-pane>
         <el-tab-pane v-if="showResultDetail.left" label="执行结果" closable name="QuestionResultDetail">
           <QuestionResultDetail :key="detailRefreshKey" />
@@ -34,6 +34,7 @@ import QuestionCode from '@/views/question/components/code/index.vue'
 import QuestionInfo from '@/views/question/components/info/index.vue'
 import { useQuestionStore } from '@/stores/question'
 import { storeToRefs } from 'pinia'
+import type { TabsPaneContext } from 'element-plus'
 
 defineOptions({
   name: 'Question'
@@ -45,6 +46,7 @@ type TabName =
   'QuestionResultDetail' |
   'QuestionCode'
 
+const questionResultRef = ref<InstanceType<typeof QuestionResult>>()
 const questionStore = useQuestionStore()
 const { currentExecuteResult } = storeToRefs(questionStore)
 
@@ -82,6 +84,11 @@ const showResultDetail = ref({
   }
 })
 
+const onLeftTabClick = (pane: TabsPaneContext, ev: Event): void => {
+  if (pane.paneName as TabName === 'QuestionResult') {
+    questionResultRef.value?.init()
+  }
+}
 
 </script>
 
