@@ -6,14 +6,19 @@ export interface QuestionCondition extends BaseCondition {
 
 export interface QuestionInfo {
   id: string
-  communityId: number
-  identifier: string
-  name: string
+  questionBankId: string
+  groupName: string
+  title: string
   description: string
-  questionCount: number
-  goodCount: number
+  questionType: number
+  tags: string
+  difficulty: number
+  passCount: number
+  submitCount: number
   commentCount: number
-  studyCount: number
+  sort: number
+  timeout: number
+  memory: number
 }
 
 export interface ExecuteResultCondition extends BaseCondition {
