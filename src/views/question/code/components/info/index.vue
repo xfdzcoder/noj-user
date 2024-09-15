@@ -23,18 +23,7 @@
       </el-tag>
     </div>
     <div class="description">
-<!--      {{ questionInfo.description?.repeat(40) }}-->
-      <editor-md
-        style="height: 100%"
-        v-model="questionInfo.description"
-        :mode="'readonly'"
-        :md-rules="{
-                linkify: {
-                  fuzzyLink: false,
-                },
-              }"
-        :toolbar-config="[]"
-      ></editor-md>
+      <MdPreview :content="questionInfo?.description" />
     </div>
     <div class="info-line">
       <div class="submit-count">
@@ -61,7 +50,7 @@ import { getById } from '@/api/question/info'
 import { useQuestionStore } from '@/stores/question'
 import { storeToRefs } from 'pinia'
 import { ElMessage } from 'element-plus'
-import { EditorMd } from 'vue-devui'
+import MdPreview from '@/components/MdPreview/index.vue'
 
 defineOptions({
   name: 'QuestionInfo'
@@ -91,8 +80,8 @@ const dataResolver = {
 
 
 onMounted(() => {
-  let questionInfoId = route.params.questionInfoId
-  questionInfoId = '1829045838811627522'
+  let questionInfoId = route.params.infoId
+  // questionInfoId = '1829045838811627522'
   if (questionInfoId) {
     getById(String(questionInfoId))
       .then(res => {
@@ -138,14 +127,5 @@ onMounted(() => {
 }
 .tags > .el-tag {
   margin-right: 10px;
-}
-
-
-:deep(.dp-md-container.dp-md-readonly .dp-md-content-container .dp-editor-md-preview-container) {
-  padding: 10px;
-  border: none;
-}
-:deep(.dp-md-container.dp-md-readonly .dp-md-toolbar-container) {
-  display: none;
 }
 </style>

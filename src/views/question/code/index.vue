@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="left">
+      <el-button class="return-btn" link @click="toBankDetailView"><&ensp;返回题库列表</el-button>
       <el-tabs type="border-card" v-model="leftTab" @tab-click="onLeftTabClick" @tab-remove="showResultDetail.remove('left')">
         <el-tab-pane label="题目详情" name="QuestionInfo">
           <QuestionInfo />
@@ -14,9 +15,10 @@
       </el-tabs>
     </div>
     <div class="right">
+      <el-button link disabled>&ensp;</el-button>
       <el-tabs type="border-card" v-model="rightTab" @tab-remove="showResultDetail.remove('right')">
         <el-tab-pane label="代码" name="QuestionCode">
-          <QuestionCode @show-result-detail="() => showResultDetail.show('left')" />
+          <QuestionCodeEditor @show-result-detail="() => showResultDetail.show('left')" />
         </el-tab-pane>
         <el-tab-pane v-if="showResultDetail.right" label="执行结果" closable name="QuestionResultDetail">
           <QuestionResultDetail :key="detailRefreshKey" fetch />
@@ -28,16 +30,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import QuestionResult from '@/views/question/components/result/index.vue'
-import QuestionResultDetail from '@/views/question/components/result/detail.vue'
-import QuestionCode from '@/views/question/components/code/index.vue'
-import QuestionInfo from '@/views/question/components/info/index.vue'
-import { useQuestionStore } from '@/stores/question'
-import { storeToRefs } from 'pinia'
+import QuestionResult from '@/views/question/code/components/result/index.vue'
+import QuestionResultDetail from '@/views/question/code/components/result/detail.vue'
+import QuestionCodeEditor from '@/views/question/code/components/code/index.vue'
+import QuestionInfo from '@/views/question/code/components/info/index.vue'
 import type { TabsPaneContext } from 'element-plus'
+import { useRoute, useRouter } from 'vue-router'
 
 defineOptions({
-  name: 'Question'
+  name: 'CodeQuestion'
 })
 
 type TabName =
@@ -46,11 +47,11 @@ type TabName =
   'QuestionResultDetail' |
   'QuestionCode'
 
-const questionResultRef = ref<InstanceType<typeof QuestionResult>>()
-const questionStore = useQuestionStore()
-const { currentExecuteResult } = storeToRefs(questionStore)
+const router = useRouter()
 
-const leftTab = ref<TabName>('QuestionResult')
+const questionResultRef = ref<InstanceType<typeof QuestionResult>>()
+
+const leftTab = ref<TabName>('QuestionInfo')
 const rightTab = ref<TabName>('QuestionCode')
 const detailRefreshKey = ref<number>(0)
 
@@ -90,6 +91,10 @@ const onLeftTabClick = (pane: TabsPaneContext, ev: Event): void => {
   }
 }
 
+const toBankDetailView = () => {
+  router.back()
+}
+
 </script>
 
 <style scoped>
@@ -110,5 +115,9 @@ const onLeftTabClick = (pane: TabsPaneContext, ev: Event): void => {
 .el-tabs__content,
 .el-tab-pane {
   height: 100%;
+}
+
+.return-btn {
+  font-size: 1rem;
 }
 </style>

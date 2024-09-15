@@ -47,8 +47,12 @@ const router = createRouter({
       component: IndexLayout,
       children: [
         {
-          path: 'info',
-          component: () => import('@/views/question/index.vue')
+          path: 'code/:infoId',
+          component: () => import('@/views/question/code/index.vue')
+        },
+        {
+          path: 'bank/:bankId',
+          component: () => import('@/views/question/bank/detail.vue')
         }
       ]
     },

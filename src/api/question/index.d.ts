@@ -1,9 +1,26 @@
 import type { BaseCondition } from '@/api/common'
+import type { exitCode } from 'process'
 
-export interface QuestionCondition extends BaseCondition {
+export interface QuestionBank {
+  id: string
+  communityId: string
+  identifier: string
+  name: string
+  description: string
+  questionCount: number
+  goodCount: number
+  commentCount: number
+  studyCount: number
+}
+
+
+export interface QuestionBankCondition extends BaseCondition {
 
 }
 
+export interface QuestionInfoCondition extends BaseCondition {
+  bankId?: string
+}
 export interface QuestionInfo {
   id: string
   questionBankId: string

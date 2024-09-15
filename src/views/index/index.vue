@@ -9,7 +9,7 @@
           />
         </div>
         <div class="question-bank-list">
-          <el-table :data="questionBankList" stripe>
+          <el-table :data="questionBankList" stripe @row-click="onClickBank">
             <el-table-column label="状态" />
             <el-table-column label="编号" prop="identifier" />
             <el-table-column label="名称" prop="name" />
@@ -56,22 +56,30 @@ import { onMounted, ref } from 'vue'
 import { hotCommunity } from '@/api/community/info'
 import type { CommunityInfo } from '@/api/community'
 import { pageQuestion } from '@/api/question/bank'
-import type { ExecuteResult, Heatmap, QuestionCondition, QuestionInfo } from '@/api/question'
+import type { ExecuteResult, Heatmap, QuestionBank } from '@/api/question'
 import { getHeatmap, recently } from '@/api/question/execute-result'
 import { useRouter } from 'vue-router'
+
 defineOptions({
   name: 'Index'
 })
 const router = useRouter()
 
 const heatmap = ref<Heatmap[]>([])
-const questionBankList = ref<QuestionInfo[]>([])
+const questionBankList = ref<QuestionBank[]>([])
 const recentlyExecuteResult = ref<ExecuteResult[]>([])
 const communityList = ref<CommunityInfo[]>([])
 
 const onClickRecentlyResult = (row: ExecuteResult, column: any, event: Event): void => {
   router.push({
     path: '/question/result/' + row.id
+  })
+}
+
+
+const onClickBank = (row: QuestionBank, column: any, event: Event): void => {
+  router.push({
+    path: '/question/bank/' + row.id
   })
 }
 

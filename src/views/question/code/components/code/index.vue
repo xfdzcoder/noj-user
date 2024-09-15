@@ -28,7 +28,7 @@ import { useQuestionStore } from '@/stores/question'
 import { storeToRefs } from 'pinia'
 
 defineOptions({
-  name: 'QuestionCode'
+  name: 'QuestionCodeEditor'
 })
 const emits = defineEmits<{
   (e: 'showResultDetail'): void
