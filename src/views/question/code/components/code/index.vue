@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="header">
-      <el-select v-model="currentExecuteInfo.languageType">
+      <el-select v-model="languageType">
         <el-option value="java">Java</el-option>
       </el-select>
       <el-button type="primary" @click="submit">提交</el-button>
@@ -9,7 +9,7 @@
     <div class="editor-box">
       <code-editor
         class="editor"
-        v-model="currentExecuteInfo.codeText"
+        v-model="code"
         :options="editorOptions"
       />
     </div>
@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { CodeEditor } from 'vue-devui'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { check, execute } from '@/api/question/code'
 import { ElMessage } from 'element-plus'
 import type { CodeExecuteReq, ExecuteInfo } from '@/api/question'
@@ -38,7 +38,7 @@ const questionStore = useQuestionStore()
 const { currentExecuteInfo, currentExecuteResult, questionInfo } = storeToRefs(questionStore)
 
 const editorOptions = computed(() => ({
-  language: currentExecuteInfo.value.languageType
+  language: languageType.value
 }))
 
 let checkerAlive = false
@@ -48,6 +48,7 @@ const checkResult = (info: ExecuteInfo) => {
     check(info.id)
       .then(res => {
         emits('showResultDetail')
+        currentExecuteInfo.value = info
         currentExecuteResult.value = res.data
         clearInterval(checker)
         checkerAlive = false
@@ -61,16 +62,27 @@ const checkResult = (info: ExecuteInfo) => {
     }
   }, 30000)
 }
+
+const languageType = ref<string>('java')
+const code = ref<string>(`import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int a = scanner.nextInt();
+        int b = scanner.nextInt();
+        System.out.println(a + b);
+    }
+}`)
+
 const submit = () => {
   const data: CodeExecuteReq = {
-    code: currentExecuteInfo.value.codeText,
+    code: code.value,
     questionInfoId: questionInfo.value?.id as string,
-    languageType: currentExecuteInfo.value.languageType
+    languageType: languageType.value
   }
   execute(data)
     .then(res => {
       checkResult(res.data)
-      currentExecuteInfo.value = res.data
       ElMessage.success('提交成功')
     })
 }
