@@ -45,7 +45,7 @@ const emits = defineEmits<{
 }>()
 
 const questionStore = useQuestionStore()
-const { currentExecuteResult } = storeToRefs(questionStore)
+const { currentExecuteResult, questionInfo } = storeToRefs(questionStore)
 
 const results = ref<Page<ExecuteResult>>()
 
@@ -57,7 +57,8 @@ const onRowClick = (row: ExecuteResult, column: any, event: Event) => {
 const init = () => {
   const condition: ExecuteResultCondition = {
     current: 1,
-    size: 10
+    size: 10,
+    questionInfoId: questionInfo.value.id
   }
   list(condition)
     .then(res => {
