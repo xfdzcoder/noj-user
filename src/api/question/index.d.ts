@@ -57,6 +57,8 @@ export interface ExecuteResult {
   exceptOutput: any
   throwableOutput: string
   exitType: string
+  assistant: string
+  newCode: string
 }
 
 export interface Heatmap {

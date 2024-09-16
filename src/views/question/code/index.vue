@@ -103,18 +103,21 @@ const toBankDetailView = () => {
   height: 100%;
 }
 
-.left {
-  width: 50%;
-}
-
+.left,
 .right {
+  height: 100%;
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .el-tabs,
 .el-tabs__content,
 .el-tab-pane {
   height: 100%;
+  width: 100%;
+  padding: 0;
 }
 
 .return-btn {

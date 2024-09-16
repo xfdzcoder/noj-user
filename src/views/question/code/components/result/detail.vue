@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-button link @click="showResultList">查看全部执行结果</el-button>
+  <div class="container">
+    <el-button link @click="showResultList"><&ensp;查看全部执行结果</el-button>
     <div class="">
       <div v-if="currentExecuteResult?.succeed" class="success-box">
         <div class="success-title">
@@ -23,7 +23,7 @@
             {{ currentExecuteResult?.exitType }}
           </span>
         </div>
-        <div v-if="currentExecuteResult?.input" class="input">
+        <div v-if="currentExecuteResult?.input && currentExecuteResult?.input.trim()" class="input">
           <span class="label">输入参数: </span>
           <pre class="content">{{ currentExecuteResult?.input }}</pre>
         </div>
@@ -51,6 +51,25 @@
              v-html="currentExecuteInfo?.codeText"></pre>
       </div>
     </div>
+    <el-collapse v-if="currentExecuteResult?.assistant && currentExecuteResult.newCode" accordion @change="onCollapseClick">
+      <el-collapse-item name="AI">
+        <template #title>
+          <span class="assistant-title">AI 改正</span>
+        </template>
+        <template #default>
+          <div class="assistant-box">
+            <div class="assistant-info">
+              {{ currentExecuteResult?.assistant }}
+            </div>
+            <div class="new-code code-content" :key="refreshNewCodeKey">
+            <pre v-d-code-highlight :data-lang="currentExecuteInfo?.languageType.toLowerCase()"
+                 v-html="currentExecuteResult?.newCode"></pre>
+            </div>
+          </div>
+        </template>
+      </el-collapse-item>
+    </el-collapse>
+
   </div>
 </template>
 
@@ -78,11 +97,19 @@ const props = defineProps({
 })
 
 const refreshKey = ref<number>(-999999)
+const refreshNewCodeKey = ref<number>(-999999)
 const questionStore = useQuestionStore()
 const { currentExecuteResult, currentExecuteInfo } = storeToRefs(questionStore)
 
 const showResultList = () => {
   emits('changeLeft', 'QuestionResult')
+}
+
+const onCollapseClick = (val: 'AI' | '') => {
+  console.log(val)
+  if (val === 'AI') {
+    refreshNewCodeKey.value++
+  }
 }
 
 
@@ -108,13 +135,24 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.success-box {
+.container {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.container > div {
+  width: 98%;
+}
+
+.success-box, .assistant-title {
   font-size: 1.2rem;
 }
 
 .success-title {
   display: flex;
 }
+
 .success-title .content {
   font-size: 1.2rem;
   color: green;
@@ -125,18 +163,22 @@ onMounted(() => {
   font-size: 1.2rem;
   font-family: "Microsoft YaHei UI", serif;
 }
+
 .error-title .content {
   color: red;
   font-weight: bold;
 }
+
 .input {
   display: flex;
   flex-direction: column;
 }
+
 .content {
   font-size: 0.9rem;
   font-family: "Microsoft YaHei UI", serif;
 }
+
 .input .content,
 .output .content,
 .except-output .content {
@@ -146,6 +188,7 @@ onMounted(() => {
   border-radius: 10px;
   padding: 5px;
 }
+
 .error-title .content {
   font-size: 1.2rem;
 }
@@ -166,9 +209,16 @@ onMounted(() => {
   border-top: 1px solid #77777c;
   margin-top: 20px;
 }
+
 .code-content {
   background-color: #f7f7f8;
   padding: 5px;
   border-radius: 10px;
 }
+
+.el-collapse {
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+
 </style>

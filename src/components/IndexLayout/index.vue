@@ -23,7 +23,7 @@ defineOptions({
 <style scoped>
 .page {
   height: 100vh;
-  width: 100vw;
+  width: 99vw;
 /*  position: absolute;
   top: 0;
   left: 0;*/
@@ -36,7 +36,7 @@ defineOptions({
   margin: 0 20vw 0 20vw;
 }
 .header {
-  height: 3vh;
+  height: 4vh;
 }
 .main {
   height: 90vh;
