@@ -16,6 +16,8 @@ export interface QuestionBank {
 
 export interface QuestionBankCondition extends BaseCondition {
 
+  communityInfoId?: string
+
 }
 
 export interface QuestionInfoCondition extends BaseCondition {

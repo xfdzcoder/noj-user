@@ -22,7 +22,7 @@
       <div class="main-right">
         <h3>社群热度榜</h3>
         <div class="community-list">
-          <el-table :data="communityList">
+          <el-table :data="communityList" @row-click="onClickCommunity">
             <el-table-column type="index" width="50" label="排名" />
             <el-table-column label="名称" prop="name" />
             <el-table-column label="帖子数量" prop="postCount" />
@@ -41,7 +41,7 @@ import { hotCommunity } from '@/api/community/info'
 import type { CommunityInfo } from '@/api/community'
 import { pageQuestion } from '@/api/question/bank'
 import type { Heatmap, QuestionBank } from '@/api/question'
-import { getHeatmap, recently } from '@/api/question/execute-result'
+import { getHeatmap } from '@/api/question/execute-result'
 import { useRouter } from 'vue-router'
 import { getDateStr } from '@/utils/time'
 
@@ -52,14 +52,19 @@ const router = useRouter()
 
 const heatmap = ref<Heatmap[]>([])
 const questionBankList = ref<QuestionBank[]>([])
-const communityList = ref<CommunityInfo[]>([])
-
 const onClickBank = (row: QuestionBank, column: any, event: Event): void => {
   router.push({
     path: '/question/bank/' + row.id
   })
 }
 
+
+const communityList = ref<CommunityInfo[]>([])
+const onClickCommunity = (row: CommunityInfo, column: any, event: Event) => {
+  router.push({
+    path: '/community/info/' + row.id
+  })
+}
 
 const init = () => {
   getHeatmap()

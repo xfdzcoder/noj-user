@@ -1,9 +1,27 @@
 export interface CommunityInfo {
-  id: number
-  manageUserId: number
-  userId: number
+  id: string
+  manageUserId: string
+  userId: string
   name: string
   description: string
   starCount: number
   postCount: number
+}
+
+export interface PostInfo {
+  id: string
+  author: string
+  communityInfoId: string
+  title: string
+  summary: string
+  tags: string
+  type: number
+  goodCount: number
+  commentCount: number
+  topped: boolean
+  status: number
+
+  good: boolean
+  avatar: string
+  authorName: string
 }

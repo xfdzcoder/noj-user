@@ -57,6 +57,16 @@ const router = createRouter({
       ]
     },
     {
+      path: '/community',
+      component: IndexLayout,
+      children: [
+        {
+          path: 'info/:infoId',
+          component: () => import('@/views/community/info/index.vue')
+        }
+      ]
+    },
+    {
       path: '/portal',
       children: [
         {
