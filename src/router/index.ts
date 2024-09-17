@@ -63,6 +63,15 @@ const router = createRouter({
         {
           path: 'info/:infoId',
           component: () => import('@/views/community/info/index.vue')
+        },
+        {
+          path: 'post',
+          children: [
+            {
+              path: 'edit/:communityInfoId',
+              component: () => import('@/views/community/post/edit/index.vue')
+            }
+          ]
         }
       ]
     },

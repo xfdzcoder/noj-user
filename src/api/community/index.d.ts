@@ -1,3 +1,5 @@
+import type { BaseCondition } from '@/api/common'
+
 export interface CommunityInfo {
   id: string
   manageUserId: string
@@ -24,4 +26,21 @@ export interface PostInfo {
   good: boolean
   avatar: string
   authorName: string
+}
+
+export interface PostInfoReq {
+  id?: string
+  communityInfoId: string
+  title: string
+  summary: string
+  content: string
+  tags: string
+  type: number
+  topped: boolean
+  status: number
+}
+
+export interface PostInfoCondition extends BaseCondition {
+  lastId: string | null
+  communityInfoId: string
 }

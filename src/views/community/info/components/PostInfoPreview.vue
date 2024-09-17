@@ -7,10 +7,10 @@
       </div>
     </div>
     <div class="title">
-      {{ props.info.title.repeat(1000) }}
+      {{ props.info.title }}
     </div>
     <div class="summary">
-      {{ props.info.summary.repeat(1000) }}
+      {{ props.info.summary }}
     </div>
     <div class="info-line">
       <div class="thumbs-up">
@@ -30,11 +30,11 @@
               p-id="4244" fill="#2c2c2c"></path>
           </svg>
         </el-icon>
-        {{ props.info.goodCount }}
+        {{ props.info.goodCount ?? '' }}
       </div>
       <div class="comment">
         <el-icon><ChatLineRound /></el-icon>
-        {{ props.info.commentCount }}
+        {{ props.info.commentCount ?? '' }}
       </div>
     </div>
   </div>
