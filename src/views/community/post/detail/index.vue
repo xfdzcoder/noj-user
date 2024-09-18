@@ -27,7 +27,7 @@
           :config="commentConfig as ConfigApi"
           @submit="submitComment"
           @reply-page="moreCommentReply"
-          @like="like"
+          @like="likeComment"
           @before-data="beforeData"
         >
           <!-- <template>导航栏卡槽</template> -->
@@ -55,11 +55,11 @@ import {
   type CommentApi,
   type CommentReplyPageApi,
   type CommentSubmitApi,
-  type ConfigApi, UComment,
+  type ConfigApi, isArray, UComment,
   UCommentScroll, type UserApi
 } from 'undraw-ui'
 import emoji from '@/assets/emoji'
-import { getComment, save } from '@/api/community/comment'
+import { getComment, getLickCommentIdList, like, save } from '@/api/community/comment'
 import type { Page } from '@/api/common'
 import { useUserStore } from '@/stores/userInfo'
 import { getDateStr } from '@/utils/time'
@@ -82,7 +82,8 @@ const commentConfig = reactive<ConfigApi>({
   user: {
     id: userInfo.value?.id as string,
     username: userInfo.value?.nickname as string,
-    avatar: userInfo.value?.avatar as string
+    avatar: userInfo.value?.avatar as string,
+    likeIds: []
   },
   relativeTime: true,
   show: {
@@ -146,12 +147,14 @@ const submitComment = ({ content, parentId, finish }: CommentSubmitApi) => {
   })
 }
 // 点赞按钮事件
-const like = (id: string, finish: () => void) => {
-  console.log('点赞: ' + id)
-  // 模拟请求接口成功处理
-  setTimeout(() => {
+const likeComment = (id: string, finish: () => void) => {
+  like({
+    commentId: id,
+    postInfoId: route.params.infoId as string
+  }).then(res => {
     finish()
-  }, 200)
+    ElMessage.success('点赞成功')
+  })
 }
 
 const init = () => {
@@ -175,6 +178,10 @@ const init = () => {
     .then(res => {
       commentConfig.comments = res.data.records
       commentPage.value = res.data
+    })
+  getLickCommentIdList(infoId as string)
+    .then(res => {
+      commentConfig.user.likeIds = res.data
     })
 }
 onMounted(() => {

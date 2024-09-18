@@ -84,3 +84,8 @@ export interface PostCommentReq {
   parentId: string
   content: string
 }
+
+export interface LikeCommentReq {
+  postInfoId: string
+  commentId: string
+}
