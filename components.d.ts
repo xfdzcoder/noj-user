@@ -33,6 +33,8 @@ declare module 'vue' {
     MdPreview: typeof import('./src/components/MdPreview/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UComment: typeof import('undraw-ui')['UComment']
+    UCommentScroll: typeof import('undraw-ui')['UCommentScroll']
   }
   export interface ComponentCustomProperties {
     vDCodeHighlight: typeof import('vue-devui/d-code-highlight/index.es.js')['DCodeHighlightDirective']

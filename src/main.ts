@@ -17,6 +17,9 @@ import { ThemeServiceInit, infinityTheme } from 'devui-theme'
 
 ThemeServiceInit({ infinityTheme }, 'infinityTheme')
 
+import UndrawUi from 'undraw-ui'
+import 'undraw-ui/dist/style.css'
+
 const app = createApp(App)
 
 let pinia = createPinia()
@@ -27,5 +30,6 @@ app.use(pinia)
 app.use(router)
 app.use(VueCalendarHeatmap)
 app.use(DevUI)
+app.use(UndrawUi)
 
 app.mount('#app')

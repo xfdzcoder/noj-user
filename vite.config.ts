@@ -7,6 +7,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { DevUiResolver, ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { UndrawUiResolver } from 'undraw-ui/es/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({

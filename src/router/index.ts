@@ -70,6 +70,10 @@ const router = createRouter({
             {
               path: 'edit/:communityInfoId',
               component: () => import('@/views/community/post/edit/index.vue')
+            },
+            {
+              path: 'detail/:infoId',
+              component: () => import('@/views/community/post/detail/index.vue')
             }
           ]
         }

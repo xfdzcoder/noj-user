@@ -8,6 +8,7 @@
         <PostInfoPreview
           v-for="info in postInfoPage.records"
           :info="info"
+          @click="toPostDetail(info)"
         />
       </div>
       <div class="aside">
@@ -28,13 +29,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import type { PostInfo } from '@/api/community'
+import type { PostInfo, PostInfoDetail } from '@/api/community'
 import type { Page } from '@/api/common'
 import PostInfoPreview from '@/views/community/info/components/PostInfoPreview.vue'
 import type { QuestionBank } from '@/api/question'
 import { pageQuestion } from '@/api/question/bank'
 import { useRoute, useRouter } from 'vue-router'
 import { listPostInfo } from '@/api/community/post'
+import { usePostStore } from '@/stores/post'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'CommunityInfo'
@@ -58,6 +61,15 @@ const onClickBank = (row: QuestionBank, column: any, event: Event): void => {
 const toEditView = () => {
   router.push({
     path: '/community/post/edit/' + route.params.infoId
+  })
+}
+
+const postStore = usePostStore()
+const { postInfo } = storeToRefs(postStore)
+const toPostDetail = (info: PostInfo) => {
+  postInfo.value = info as PostInfoDetail
+  router.push({
+    path: '/community/post/detail/' + info.id
   })
 }
 
